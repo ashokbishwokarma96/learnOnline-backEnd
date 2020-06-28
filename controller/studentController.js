@@ -37,6 +37,7 @@ exports.signup = (req, res, next) => {
                   })
         }
 
+        
 exports.login=(req, res,next)=> {
           console.log(req.body);
                   Student.findOne({email:req.body.email}, function(err,student){
@@ -64,8 +65,20 @@ exports.login=(req, res,next)=> {
                    })
                   }
 
-          exports.allStudents = (req,res,next)=>{
+exports.allStudents = (req,res,next)=>{
                     Student.find().then(student=>{
                               res.status(200).send(student)
                     }).catch(err=>res.send(err))
           }
+
+
+exports.me = async (req, res, next) => {
+            try {
+              res.status(200).json(req.student);
+            } catch (err) {
+              res.status(400).json({
+                status: "Failure",
+                message: err
+              });
+            }
+          };
