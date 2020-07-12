@@ -82,3 +82,14 @@ exports.me = async (req, res, next) => {
               });
             }
           };
+
+          exports.getSingleUser = async (req, res, next) => {
+            try {
+              res.status(200).json(req.Student);
+            } catch (err) {
+              res.status(400).json({
+                status: "Failure",
+                message: err
+              });
+            }
+          };

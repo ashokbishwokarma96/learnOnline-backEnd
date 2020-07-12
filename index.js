@@ -3,11 +3,12 @@ const bodyParser = require('body-parser')
 const dotenv = require('dotenv').config();
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-
-const main = require('./route/mainRoute');
-const course = require('./route/courseRoute');
+// const main = require('./route/mainRoute');
+// const course = require('./route/courseRoute');
 const student = require('./route/studentRoute');
 const enroll  = require('./route/enrollRoute');
+const auth = require('./authentication');
+const caradd = require('./route/adminR');
 
 const app = express();
 
@@ -41,10 +42,13 @@ app.use((req, res, next) => {
         app.use(bodyParser.json())
         app.use(bodyParser.urlencoded({extended:false}));
 
-        app.use("/",main);
-        app.use("/course",course);
+        // app.use("/",main);
+        // app.use("/course",course);
         app.use("/student",student);
         app.use("/enroll",enroll);
+
+        //app.use("/admin",caradd);
+        app.use("/admin",auth.verifyStudent,auth.verifyAdmin,caradd);
 
         app.listen(process.env.PORT,()=>{
           console.log("Server Running. "+ process.env.PORT);

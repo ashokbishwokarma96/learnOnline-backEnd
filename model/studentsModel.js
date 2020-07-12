@@ -20,10 +20,10 @@ const studentData = mongoose.Schema({
                     type: String,
                     reqired: true       
           },
-          admin:{
-                    type:Boolean,
-                    default:false
-          }
+          user_type: {
+            type: String,
+            default:"user"
+        },
 })
 
 module.exports = mongoose.model('Student', studentData)

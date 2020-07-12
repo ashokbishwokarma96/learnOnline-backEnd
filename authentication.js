@@ -21,3 +21,16 @@ exports.verifyStudent = (req, res, next) => {
             next();
         }).catch(err=>res.send(err))
 }
+exports.verifyAdmin = (req, res, next) => {
+    if (!req.student) {
+        let err = new Error('Unauthorized');
+        err.status = 401;
+        return next(err);
+    }
+    if (req.student.user_type !== "admin") {
+        let err = new Error('Forbidden');
+        err.status = 403;
+        return next(err);
+    }
+    next();
+}

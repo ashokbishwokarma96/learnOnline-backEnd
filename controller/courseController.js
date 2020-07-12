@@ -1,88 +1,114 @@
-const bcrypt = require('bcryptjs');
-const auth = require('jsonwebtoken');
+const Car = require('../model/courseModel');
+const multer = require('multer');
+const jwt = require('jsonwebtoken');
+const express = require('express');
 
-const Course = require('../model/courseModel');
+const app = express();
 
-exports.newCourse = (req,res,next) =>{
-          console.log(req.body);
-const newCourse = new Course({
+var storage = multer.diskStorage(
+  {
+    destination: (req, res, cb) => {
+      cb(null, "./public/uploads/cars")
+    },
 
-          courseName: req.body.courseName,
-          courseCode: req.body.courseCode,
-          courseAvailability: req.body.courseAvailability,
-          coursePrice: req.body.coursePrice,
-          courseCreator: req.body.courseCreator,
-          courseDescription: req.body.courseDescription
-          
-})
-newCourse.save().then( res.status(201).send({
-  status: "Success",
-  message: "Course added successfully"
-}))
-.catch(err=>res.send(err))}
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + file.originalname)
+    }
+  }
+);
 
-exports.courses = (req,res,next)=>{
-          console.log("Students viewing main dashboard")
-          Course.find().then(course=>{
-      
-                    res.status(200).send(course)
-                
-                
-          }).catch(err=>res.send(err))
+const filter = (req, file, cb) => {
+  if (file.originalname.match(/\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$/)) {
+    cb(null, true);
+  }
+  else {
+    return cb(new Error("Invalid image file type."))
+  }
 }
 
-exports.course = (req,res,next)=>{
-          console.log(req.params.id)
-          Course.findById(req.params.id).then(course=>{
-                    res.status(200).send(course)
-          }).catch(err=>res.send(err))
-        }
+var upload = multer({ storage: storage, fileFilter: filter });
 
-exports.update = (req, res, next) => {
-          uid = req.params._id;
-          console.log(uid)
+exports.uploadImage = upload.single('image');
 
-          Course.update(
-            { _id: uid },
-            {
-              $set: {
-                    courseName: req.body.courseName,
-                    courseCode: req.body.courseCode,
-                    courseAvailability: req.body.courseAvailability,
-                    coursePrice: req.body.coursePrice,
-                    courseCreator: req.body.courseCreator,
-                    courseDescription: req.body.courseDescription
+exports.carAdd = (req, res, next) => {
+  var car = new Car({
+    courseName: req.body.courseName,
+    courseCode: req.body.courseCode,
+    courseAvailability: req.body.courseAvailability,
+    coursePrice: req.body.coursePrice,
+    courseCreator: req.body.courseCreator,
+    courseDescription: req.body.courseDescription,
+    
+    image: req.file.filename
 
-              }
-            }
-          )
-            .then(function (recipe) {
-              res.status(201).json({
-                message: "Course Updated Successfully"
-              });
-            })
-            .catch(function (e) {
-              res.status(422).json({
+  })
+  car.save().then(res.status(201).send({
+    status: "Success",
+    data: car
+  })
+  ).catch(err => {
+    res.send({
+      status: "Failure",
+      err: err,
+    })
+  }
+  );
+}
 
-                message: "Unable to Update:" + e
+exports.carshow = (req, res, next) => {
+  Car.find().then(result => {
+    res.send(result)
 
-              });
-            });
-        }
+  }).catch(err => res.send(err))
+}
 
-exports.delete=(req, res,next) => {
-          Course.findById(req.params._id).then(user => {
+exports.singleshow = (req, res, next) => {
+  Car.findById(req.params.id).then(result => {
+    res.send(result)
 
-                user
-              .delete()
-              .then(function(result) {
-                res.status(201).json({
+  }).catch(err => res.send(err))
+}
 
-                  message: "Course Deleted Successfully"
-                });
-              })
-              .catch(function(e) {
-                console.log(e);
-              });
-          });
-        }
+exports.updatecar = (req, res, next) => {
+  uid = req.params._id;
+  console.log(uid)
+  
+  Car.update(
+    { _id: uid },
+    {
+      $set: {
+       
+        carName: req.body.carName,
+        carRegistrationNo: req.body.carRegistrationNo,
+        carMan: req.body.carMan,
+        carAC_Status: req.body.carAC_Status,
+        carMileage: req.body.carMileage,
+        carRentalPrice: req.body.carRentalPrice,
+        carSeats: req.body.carSeats
+
+      }
+    }
+  )
+    .then(function (user) {
+      res.status(201).json({
+        message: "User Details Updated Successfully"
+      });
+    })
+    .catch(function (e) {
+      res.status(422).json({
+        message: "Unable to Update:" + e
+      });
+    });
+}
+
+
+exports.deleteUser = (req, res, next) => {
+  Car.findOneAndDelete({ _id: req.params._id })
+    .then(res.send("Deleted Successfully")).catch(err => res.send(err))
+}
+
+exports.countCar = async (req, res) => {
+  await Car.find().then(use => {
+    res.send({ countCar: use.length })
+  }).catch(err => res.send(err))
+};
