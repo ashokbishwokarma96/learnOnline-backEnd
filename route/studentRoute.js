@@ -3,6 +3,7 @@ const studentController = require('../controller/studentController')
 const route = express.Router();
 const book = require('../controller/bookingC')
 const auth = require("../authentication")
+const msg = require('../controller/commentC')
 const user = require('../controller/courseController');
 
 route.get('/',studentController.allStudents)
@@ -38,5 +39,18 @@ route.route ('/allbooklist')
 .get(book.allbooklist)
 
 route.delete("/deletebook/:_id", book.deletebookingdata);
+
+
+route.route("/comment")
+    .get((req, res) => {
+        res.send("comment successfully")
+    })
+    .post(auth.verifyStudent, msg.comment);
+
+    route.route ('/showcomment')
+.get(msg.usercomment)
+
+route.route ('/alluserlist')
+.get(studentController.userlist)
 
 module.exports = route;

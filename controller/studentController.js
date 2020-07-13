@@ -93,3 +93,10 @@ exports.me = async (req, res, next) => {
               });
             }
           };
+
+          exports.userlist =(req,res,next)=>{
+            Student.find().then(result=>{
+              res.send(result)
+          
+            }).catch(err=>res.send(err))
+          }
