@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll",
+    "testj": "jest --watchAll ./Testjest",
+    "testm": "mocha ./TestMocha/app.test.js",
     "start": "nodemon index.js"
   },
   "repository": {
@@ -30,6 +31,9 @@
     "nodemon": "^2.0.4"
   },
   "devDependencies": {
-    "jest": "^26.1.0"
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "jest": "^26.1.0",
+    "mocha": "^8.0.1"
   }
 }
