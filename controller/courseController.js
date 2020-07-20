@@ -78,13 +78,13 @@ exports.updatecar = (req, res, next) => {
     {
       $set: {
        
-        carName: req.body.carName,
-        carRegistrationNo: req.body.carRegistrationNo,
-        carMan: req.body.carMan,
-        carAC_Status: req.body.carAC_Status,
-        carMileage: req.body.carMileage,
-        carRentalPrice: req.body.carRentalPrice,
-        carSeats: req.body.carSeats
+        courseName: req.body.courseName,
+        courseCode: req.body.courseCode,
+        courseAvailability: req.body.courseAvailability,
+        coursePrice: req.body.coursePrice,
+        courseCreator: req.body.courseCreator,
+        courseDescription: req.body.courseDescription,
+
 
       }
     }

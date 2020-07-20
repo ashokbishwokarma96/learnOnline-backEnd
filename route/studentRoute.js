@@ -50,7 +50,12 @@ route.route("/comment")
     route.route ('/showcomment')
 .get(msg.usercomment)
 
+route.delete("/commentdata/:_id", msg.commentdata);
+
 route.route ('/alluserlist')
 .get(studentController.userlist)
+
+route.route('/car/:id')
+.get(user.singleshow)
 
 module.exports = route;

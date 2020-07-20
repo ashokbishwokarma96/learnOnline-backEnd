@@ -52,6 +52,7 @@ exports.login=(req, res,next)=> {
                         status:"Login Success!",
                         token:token,
                         email:student.email,
+                        usertype: student.user_type,
                         admin: student.admin});
                         }
                         else{res.json({status:"error", message: "Invalid email/password!!!", data:null});}

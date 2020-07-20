@@ -2,7 +2,7 @@ const express = require('express');
 
 const user = require('../controller/courseController');
 const userbook = require('../controller/bookingC');
-
+const upload = require('../controller/uploads');
 const route = express.Router();
 
 // route.post("/register",user.registerUser);
@@ -23,12 +23,12 @@ route.route("/caradd")
     route.route ('/allbooklist')
     .get(userbook.allbooklist)
   
-// route.post("/upload", upload,(req,res)=>{
-//   console.log(req.file.filename)
-//   res.json(req.file)
-// });
+route.post("/upload", upload,(req,res)=>{
+  console.log(req.file.filename)
+  res.json(req.file)
+});
 
-// route.patch("/updatecar/:_id",user.updatecar)
+route.patch("/updatecar/:_id",user.updatecar)
 // route.patch("/updateuser/:_id",userdata.update)
 
 // route.delete("/deleteUser/:_id",user.deleteUser);
